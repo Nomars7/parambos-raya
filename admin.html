@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1f2937">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+      }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admin - PARAMBOS LOGISTICS</title>
@@ -171,6 +179,7 @@
             const encodedMessage = encodeURIComponent(message);
             window.open(`https://wa.me/${targetNum}?text=${encodedMessage}`, '_blank');
         }
-    </script>
+
+   </script>
 </body>
 </html>
