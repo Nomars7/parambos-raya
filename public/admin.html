@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CV PARAMBOS RAYA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 p-4 sm:p-8">
+    <div class="max-w-2xl mx-auto bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-700">
+            <div>
+                <h1 class="text-xl font-bold text-white">Panel Input Operational</h1>
+                <p class="text-xs text-blue-400">CV PARAMBOS RAYA Logistics</p>
+            </div>
+            <a href="/" class="text-xs text-slate-400 hover:text-white"><i class="fa-solid fa-globe"></i> Lihat Web Utama</a>
+        </div>
+
+        <form id="adminForm" onsubmit="saveData(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold mb-1 text-slate-300">Nomor Resi / DO *</label>
+                <input type="text" id="code" required placeholder="Contoh: PRB-8821 atau DO-9901" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-300">Tipe Dokumen</label>
+                    <select id="type" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Shipment STT">Shipment STT</option>
+                        <option value="Delivery Order">Delivery Order (DO)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-300">Status Pengiriman</label>
+                    <select id="status" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="DALAM PERJALANAN">DALAM PERJALANAN</option>
+                        <option value="DIBONGKAR / TRANSIT">DIBONGKAR / TRANSIT</option>
+                        <option value="SELESAI / DELIVERED">SELESAI / DELIVERED</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-300">Nama Pengirim</label>
+                    <input type="text" id="sender" placeholder="Contoh: PT Industri Jaya" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold mb-1 text-slate-300">Nama Penerima</label>
+                    <input type="text" id="receiver" placeholder="Contoh: CV Sukses Mandiri" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold mb-1 text-slate-300">Armada / Supir</label>
+                <input type="text" id="fleet" placeholder="Contoh: Truk 01 - B 9821 PRB" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold mb-1 text-slate-300">Catatan Perjalanan Terbaru (Timeline Log)</label>
+                <textarea id="logDesc" rows="2" placeholder="Contoh: Armada telah sampai di Gerbang Tol Cikampek Utama" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm text-white"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition text-sm">
+                Simpan & Update Status Pengiriman
+            </button>
+        </form>
+
+        <div id="alertBox" class="hidden mt-4 p-3 rounded-lg text-xs font-medium text-center"></div>
+    </div>
+
+    <script>
+        async function saveData(e) {
+            e.preventDefault();
+            const payload = {
+                code: document.getElementById('code').value.trim(),
+                type: document.getElementById('type').value,
+                status: document.getElementById('status').value,
+                sender: document.getElementById('sender').value,
+                receiver: document.getElementById('receiver').value,
+                fleet: document.getElementById('fleet').value,
+                logDesc: document.getElementById('logDesc').value
+            };
+
+            const res = await fetch('/api/admin/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            const alertBox = document.getElementById('alertBox');
+            alertBox.classList.remove('hidden');
+            
+            if (data.success) {
+                alertBox.className = "mt-4 p-3 rounded-lg text-xs font-medium text-center bg-green-500/20 text-green-400 border border-green-500/30";
+                alertBox.innerText = "Data berhasil disimpan dan diperbarui!";
+                document.getElementById('logDesc').value = '';
+            } else {
+                alertBox.className = "mt-4 p-3 rounded-lg text-xs font-medium text-center bg-red-500/20 text-red-400 border border-red-500/30";
+                alertBox.innerText = data.message;
+            }
+        }
+    </script>
+</body>
+</html>
