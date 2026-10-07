@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - CV PARAMBOS RAYA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Modal Login Kata Sandi Admin -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md text-center">
+            <h2 class="text-2xl font-bold mb-4 text-blue-900">Akses Admin CV PARAMBOS RAYA</h2>
+            <p class="text-gray-600 text-sm mb-4">Masukkan kata sandi admin untuk mengakses panel ini:</p>
+            <input type="password" id="adminPassword" placeholder="Kata Sandi Admin" class="w-full border p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <button onclick="checkPassword()" class="w-full bg-blue-700 text-white py-2 rounded font-semibold hover:bg-blue-800 transition">Masuk Panel</button>
+            <p id="errorMsg" class="text-red-500 text-xs mt-2 hidden">Kata sandi salah! Silakan coba lagi.</p>
+        </div>
+    </div>
+
+    <!-- Konten Main Admin -->
+    <div id="adminContent" class="hidden container mx-auto p-4 md:p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Panel Manajemen Pengiriman & Fleet</h1>
+            <a href="index.html" class="text-sm bg-gray-600 text-white px-3 py-2 rounded hover:bg-gray-700">Ke Halaman Utama</a>
+        </div>
+
+        <!-- Form Input Resi Baru -->
+        <div class="bg-white p-6 rounded-lg shadow mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Input Data Pengiriman / DO Baru</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="doNumber" placeholder="Nomor DO / Resi (Contoh: PRB-2026-001)" class="border p-2 rounded w-full">
+                <input type="text" id="customerName" placeholder="Nama Pengirim / Penerima" class="border p-2 rounded w-full">
+                <input type="text" id="destination" placeholder="Kota / Alamat Tujuan" class="border p-2 rounded w-full">
+                <select id="statusSelect" class="border p-2 rounded w-full">
+                    <option value="Proses Muat">Proses Muat</option>
+                    <option value="Dalam Perjalanan">Dalam Perjalanan</option>
+                    <option value="Terkirim">Terkirim</option>
+                </select>
+            </div>
+            <div class="mt-4 flex gap-3">
+                <button onclick="saveDO()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium">Simpan & Buat Label Barcode</button>
+            </div>
+        </div>
+
+        <!-- Area Pratinjau & Cetak Label Barcode -->
+        <div id="printArea" class="bg-white p-6 rounded-lg shadow hidden">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Label Resi Pengiriman (Siap Cetak)</h2>
+            <div id="ticketLabel" class="border-2 border-dashed border-gray-400 p-6 rounded max-w-md mx-auto text-center bg-gray-50">
+                <h3 class="font-bold text-lg text-blue-900">CV PARAMBOS RAYA</h3>
+                <p class="text-xs text-gray-500 mb-2">Jasa Pengiriman & Logistik Terpercaya</p>
+                <hr class="my-2">
+                <svg id="barcode"></svg>
+                <p class="text-xs font-mono mt-1" id="lblDoNumber"></p>
+                <div class="text-left text-sm mt-4 space-y-1">
+                    <p><strong>Pengirim/Penerima:</strong> <span id="lblCustomer"></span></p>
+                    <p><strong>Tujuan:</strong> <span id="lblDestination"></span></p>
+                    <p><strong>Status:</strong> <span id="lblStatus"></span></p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button onclick="window.print()" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 font-medium">🖨️ Cetak Resi / Save PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASS = "parambos123";
+
+        function checkPassword() {
+            const input = document.getElementById('adminPassword').value;
+            if(input === ADMIN_PASS) {
+                document.getElementById('loginModal').classList.add('hidden');
+                document.getElementById('adminContent').classList.remove('hidden');
+            } else {
+                document.getElementById('errorMsg').classList.remove('hidden');
+            }
+        }
+
+        function saveDO() {
+            const doNum = document.getElementById('doNumber').value;
+            const customer = document.getElementById('customerName').value;
+            const dest = document.getElementById('destination').value;
+            const status = document.getElementById('statusSelect').value;
+
+            if(!doNum || !customer || !dest) {
+                alert('Silakan isi seluruh kolom data pengiriman!');
+                return;
+            }
+
+            document.getElementById('lblDoNumber').innerText = doNum;
+            document.getElementById('lblCustomer').innerText = customer;
+            document.getElementById('lblDestination').innerText = dest;
+            document.getElementById('lblStatus').innerText = status;
+
+            JsBarcode("#barcode", doNum, {
+                format: "CODE128",
+                lineColor: "#000",
+                width: 2,
+                height: 50,
+                displayValue: false
+            });
+
+            document.getElementById('printArea').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
