@@ -3,78 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin - CV PARAMBOS RAYA</title>
+    <title>Panel Admin - PARAMBOS LOGISTICS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
 
-    <!-- Modal Login Kata Sandi Admin -->
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-        <div class="bg-gray-800 p-6 rounded-xl shadow-2xl w-full max-w-md text-center border border-gray-700">
-            <h2 class="text-2xl font-bold mb-2 text-blue-400">Panel Admin Logistik</h2>
-            <p class="text-gray-400 text-sm mb-6">CV PARAMBOS RAYA</p>
-            <input type="password" id="adminPassword" placeholder="Masukkan Kata Sandi Admin" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg mb-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="checkPassword()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Masuk Panel</button>
-            <p id="errorMsg" class="text-red-400 text-xs mt-3 hidden">Kata sandi salah! Silakan coba lagi.</p>
-        </div>
-    </div>
-
-    <!-- Konten Main Admin -->
-    <div id="adminContent" class="hidden container mx-auto p-4 md:p-8">
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-blue-400">Panel Input Operasional</h1>
-            <a href="index.html" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-2 rounded">Lihat Web Utama</a>
+            <h1 class="text-2xl font-bold text-blue-400">Panel Operasional & Kirim WA</h1>
+            <a href="index.html" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-200 px-3 py-2 rounded-lg">Web Utama</a>
         </div>
 
-        <div class="bg-gray-800 p-6 rounded-xl shadow border border-gray-700 mb-8">
-            <h2 class="text-lg font-semibold mb-4 text-gray-200">Input Data Resi / DO Baru</h2>
+        <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-xl mb-8 space-y-4">
+            <h2 class="text-lg font-semibold text-gray-200 border-b border-gray-700 pb-2">Input Status Pengiriman</h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="doNumber" placeholder="Nomor Resi / DO (Contoh: PRB-8821)" class="bg-gray-700 border border-gray-600 p-2.5 rounded text-white placeholder-gray-400">
-                <input type="text" id="customerName" placeholder="Nama Pengirim / Penerima" class="bg-gray-700 border border-gray-600 p-2.5 rounded text-white placeholder-gray-400">
-                <input type="text" id="destination" placeholder="Kota / Alamat Tujuan" class="bg-gray-700 border border-gray-600 p-2.5 rounded text-white placeholder-gray-400">
-                <select id="statusSelect" class="bg-gray-700 border border-gray-600 p-2.5 rounded text-white">
-                    <option value="PROSES MUAT">PROSES MUAT</option>
-                    <option value="DALAM PERJALANAN">DALAM PERJALANAN</option>
-                    <option value="TERKIRIM">TERKIRIM</option>
-                </select>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Nomor Resi / DO *</label>
+                    <input type="text" id="doNumber" placeholder="Contoh: PRB-8821" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-xl text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">No. WhatsApp Pelanggan (628...)</label>
+                    <input type="text" id="waNumber" placeholder="Contoh: 6281234567890" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-xl text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Nama Pengirim / Penerima</label>
+                    <input type="text" id="customerName" placeholder="Contoh: PT Sukses Mandiri" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-xl text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Kota / Alamat Tujuan</label>
+                    <input type="text" id="destination" placeholder="Contoh: Surabaya" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-xl text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Status Pengiriman</label>
+                    <select id="statusSelect" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-xl text-white">
+                        <option value="PROSES MUAT">PROSES MUAT (Gudang Jakarta)</option>
+                        <option value="DALAM PERJALANAN">DALAM PERJALANAN (Transit Tol Cikampek)</option>
+                        <option value="TERKIRIM">TERKIRIM (Tiba di Lokasi Tujuan)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Catatan Posisi Terbaru</label>
+                    <input type="text" id="latestLog" placeholder="Contoh: Rest Area KM 102" class="w-full bg-gray-700 border border-gray-600 p-3 rounded-xl text-white">
+                </div>
             </div>
-            <button onclick="saveDO()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg mt-4 transition">Simpan & Buat Label Barcode</button>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button onclick="saveDO()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition">Simpan & Buat Label</button>
+                <button onclick="sendWA()" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition flex items-center justify-center gap-2">📱 Kirim WA Pelanggan</button>
+            </div>
         </div>
 
-        <div id="printArea" class="bg-gray-800 p-6 rounded-xl shadow border border-gray-700 hidden text-black">
-            <h2 class="text-lg font-semibold mb-4 text-white">Label Resi Pengiriman</h2>
-            <div class="bg-white p-6 rounded-lg max-w-md mx-auto text-center">
-                <h3 class="font-bold text-xl text-blue-900">CV PARAMBOS RAYA</h3>
-                <p class="text-xs text-gray-600 mb-2">Surat Jalan & Bukti Pengiriman</p>
-                <hr class="my-2">
+        <div id="printArea" class="bg-gray-800 p-6 rounded-2xl border border-gray-700 hidden text-black">
+            <h2 class="text-lg font-semibold mb-4 text-white">Label Resi Siap Cetak</h2>
+            <div class="bg-white p-6 rounded-xl max-w-md mx-auto text-center shadow-lg">
+                <h3 class="font-bold text-xl text-blue-900">PARAMBOS LOGISTICS</h3>
+                <p class="text-xs text-gray-500 mb-2">Ekspedisi & Logistik Terpercaya</p>
+                <hr class="my-2 border-gray-300">
                 <svg id="barcode" class="mx-auto"></svg>
                 <p class="text-xs font-mono font-bold mt-1" id="lblDoNumber"></p>
                 <div class="text-left text-sm mt-4 space-y-1">
-                    <p><strong>Pengirim/Penerima:</strong> <span id="lblCustomer"></span></p>
+                    <p><strong>Pelanggan:</strong> <span id="lblCustomer"></span></p>
                     <p><strong>Tujuan:</strong> <span id="lblDestination"></span></p>
                     <p><strong>Status:</strong> <span id="lblStatus"></span></p>
                 </div>
             </div>
             <div class="text-center mt-4">
-                <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold">🖨️ Cetak / Save PDF</button>
+                <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl font-semibold">🖨️ Cetak Resi / PDF</button>
             </div>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASS = "parambos123";
-
-        function checkPassword() {
-            const input = document.getElementById('adminPassword').value;
-            if(input === ADMIN_PASS) {
-                document.getElementById('loginModal').classList.add('hidden');
-                document.getElementById('adminContent').classList.remove('hidden');
-            } else {
-                document.getElementById('errorMsg').classList.remove('hidden');
-            }
-        }
-
         function saveDO() {
             const doNum = document.getElementById('doNumber').value;
             const customer = document.getElementById('customerName').value;
@@ -82,7 +83,7 @@
             const status = document.getElementById('statusSelect').value;
 
             if(!doNum || !customer || !dest) {
-                alert('Silakan isi seluruh kolom data pengiriman!');
+                alert('Silakan isi Nomor DO, Nama Pelanggan, dan Tujuan!');
                 return;
             }
 
@@ -100,6 +101,25 @@
             });
 
             document.getElementById('printArea').classList.remove('hidden');
+        }
+
+        function sendWA() {
+            const doNum = document.getElementById('doNumber').value;
+            const waNum = document.getElementById('waNumber').value;
+            const customer = document.getElementById('customerName').value;
+            const dest = document.getElementById('destination').value;
+            const status = document.getElementById('statusSelect').value;
+            const log = document.getElementById('latestLog').value;
+
+            if(!doNum || !waNum) {
+                alert('Masukkan Nomor DO dan No. WA Pelanggan!');
+                return;
+            }
+
+            const message = `Halo Kak *${customer}*,\n\nBerikut update pengiriman barang untuk Nomor DO: *${doNum}*\n📍 *Tujuan:* ${dest}\n📦 *Status:* ${status}\n📝 *Posisi Terkini:* ${log}\n\nLacak status pengiriman Anda kapan saja di website kami.\n\nTerima kasih,\n*PARAMBOS LOGISTICS*`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${waNum}?text=${encodedMessage}`, '_blank');
         }
     </script>
 </body>
